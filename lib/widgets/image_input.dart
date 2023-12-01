@@ -47,6 +47,7 @@ widget.onPickImage(_selectedImage!);
       );
     }
     return Container(
+      
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
