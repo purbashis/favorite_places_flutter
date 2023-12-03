@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:favorite_places/models/place.dart';
+
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key});
 
@@ -16,7 +17,7 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   PlaceLocation? _pickedLocation;
   var _isGettingLocation = false;
-
+//location image
   String get locationImage {
     if (_pickedLocation == null) {
       return '';
@@ -86,7 +87,7 @@ class _LocationInputState extends State<LocationInput> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
     );
-
+// picked location image in widget 
     if (_pickedLocation != null) {
       previewContent = Image.network(
         locationImage,
