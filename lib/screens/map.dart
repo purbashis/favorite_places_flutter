@@ -31,7 +31,9 @@ class _MapScreenState extends State<MapScreen> {
           if (widget.isSelecting)
             IconButton(
               icon: const Icon(Icons.save),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop(_pickedLocation);
+              },
             )
         ],
       ),
@@ -44,14 +46,17 @@ class _MapScreenState extends State<MapScreen> {
         initialCameraPosition: CameraPosition(
             target: LatLng(widget.location.latitude, widget.location.longitude),
             zoom: 16),
-        markers:(_pickedLocation == null && widget.isSelecting ==true) ? {}:  {
-          Marker(
-            markerId: const MarkerId('m1'),
-            position: _pickedLocation ??
-                LatLng(widget.location.latitude, widget.location.longitude),
-            infoWindow: InfoWindow(title: widget.location.address),
-          ),
-        },
+        markers: (_pickedLocation == null && widget.isSelecting == true)
+            ? {}
+            : {
+                Marker(
+                  markerId: const MarkerId('m1'),
+                  position: _pickedLocation ??
+                      LatLng(
+                          widget.location.latitude, widget.location.longitude),
+                  infoWindow: InfoWindow(title: widget.location.address),
+                ),
+              },
       ),
     );
   }
