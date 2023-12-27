@@ -1,54 +1,29 @@
-// import 'package:favorite_places/models/place.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// class UserPlacesNotifier extends StateNotifier<List<Place>> {
-//   UserPlacesNotifier() : super(const []);
-
-//   // void addPlace(Place place) {
-//   //   state = [...state, place];
-//   // }
-
-//   void addPlace(String title) {
-//     final newPlace = Place(title: title);
-//     state = [newPlace,...state];
-//   }
-
-//   // void updatePlace(Place updatedPlace) {
-//   //   state = [
-//   //     for (final place in state)
-//   //       if (place.id == updatedPlace.id) updatedPlace else place
-//   //   ];
-//   // }
-// final userPlacesProvider =
-//       StateNotifierProvider<UserPlacesNotifier, List<Place>>(
-//     (ref) => UserPlacesNotifier(),
-//   );
-
-//   // void removePlace(String placeId) {
-//   //   state = state.where((place) => place.id != placeId).toList();
-//   // }
-// }
 import 'dart:io';
 
-import 'package:favorite_places/models/place.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 
+import 'package:favorite_places/models/place.dart';
+
 Future<Database> _getDatabase() async {
   final dbPath = await sql.getDatabasesPath();
-  final db = await sql.openDatabase(path.join(dbPath, 'places.db'),
-      onCreate: (db, version) {
-    return db.execute(
-        'CREATE TABLE user_places(id TEXT PRIMARY KEY ,title TEXT , image TEXT , lat REAL ,lng REAL ,address TEXT)');
-  }, version: 1);
+  final db = await sql.openDatabase(
+    path.join(dbPath, 'places.db'),
+    onCreate: (db, version) {
+      return db.execute(
+          'CREATE TABLE user_places(id TEXT PRIMARY KEY, title TEXT, image TEXT, lat REAL, lng REAL, address TEXT)');
+    },
+    version: 1,
+  );
   return db;
 }
 
 class UserPlacesNotifier extends StateNotifier<List<Place>> {
   UserPlacesNotifier() : super(const []);
+
   Future<void> loadPlaces() async {
     final db = await _getDatabase();
     final data = await db.query('user_places');
@@ -69,7 +44,6 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
 
     state = places;
   }
-  }
 
   void addPlace(String title, File image, PlaceLocation location) async {
     final appDir = await syspaths.getApplicationDocumentsDirectory();
@@ -78,6 +52,7 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
 
     final newPlace =
         Place(title: title, image: copiedImage, location: location);
+
     final db = await _getDatabase();
     db.insert('user_places', {
       'id': newPlace.id,
@@ -85,8 +60,9 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
       'image': newPlace.image.path,
       'lat': newPlace.location.latitude,
       'lng': newPlace.location.longitude,
-      'address': newPlace.location.address
+      'address': newPlace.location.address,
     });
+
     state = [newPlace, ...state];
   }
 }
