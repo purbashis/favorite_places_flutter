@@ -25,7 +25,7 @@ class PlacesListScreen extends ConsumerWidget {
       ),
       body:  Padding(
         padding: const EdgeInsets.all(8.0),
-        child: PlacesList(
+        child:FutureBuilder  PlacesList(
           places: userPlaces,
         ),
       ),
